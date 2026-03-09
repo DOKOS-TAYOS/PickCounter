@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pick-counter"
-version = "0.1.0"
+version = "1.0.0"
 description = "Count guitar picks in images and export results as JSON"
 readme = "README.md"
 license = { text = "MIT" }
@@ -12,6 +12,7 @@ requires-python = ">=3.12"
 dependencies = [
     "numpy",
     "opencv-python",
+    "streamlit",
 ]
 
 [project.urls]

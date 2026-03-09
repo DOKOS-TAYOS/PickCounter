@@ -65,6 +65,16 @@ run.bat input\example_1.jpg
 
 Without arguments, a file picker opens. With a path, that image is processed directly.
 
+### Streamlit web app
+
+To run the web app locally:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+To deploy to [Streamlit Community Cloud](https://streamlit.io/cloud), connect your GitHub repo and set `streamlit_app.py` as the main file.
+
 From Python:
 
 ```python
