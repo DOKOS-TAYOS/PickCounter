@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-import tkinter as tk
 from pathlib import Path
-from tkinter import filedialog
 
 import cv2
 import numpy as np
@@ -14,6 +12,9 @@ from .config import REPO_ROOT, SUPPORTED_EXTENSIONS
 
 def choose_image_file(initial_dir: str | Path | None = None) -> Path:
     """Open a file dialog to select an image file."""
+    import tkinter as tk
+    from tkinter import filedialog
+
     start_dir = Path(initial_dir) if initial_dir is not None else REPO_ROOT / "input"
     root = tk.Tk()
     root.withdraw()
