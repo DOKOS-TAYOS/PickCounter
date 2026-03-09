@@ -10,38 +10,54 @@ Small Python project to count guitar picks in a selected image and export the re
 - `input/`: sample images
 - `real_output/`: expected reference output for the example images
 - `output/`: generated JSON files
+- `install.bat` / `install.sh`: full installation (clone, check deps, setup)
+- `setup.bat` / `setup.sh`: environment setup (venv, dependencies)
+- `run.bat` / `run.sh`: run the application
 - `THIRD_PARTY_LICENSES.md`: dependency license summary
 
-## Requirements
+## Installation
 
-- Python 3.12
-- Dependencies from [requirements.txt](requirements.txt)
+### One-step install (recommended)
 
-Install them in your environment with:
+**Windows** — Download and run `install.bat`. It checks Git and Python (prompts download URLs if missing), clones the repo, and runs setup:
 
-```powershell
-python -m pip install -r requirements.txt
+```batch
+install.bat
 ```
+
+**Linux / macOS** — Download and run `install.sh`. It installs Git and Python if needed, clones the repo, and runs setup:
+
+```bash
+sh install.sh
+# or: chmod +x install.sh && ./install.sh
+```
+
+### Manual install
+
+If you already have the repo cloned:
+
+1. **Requirements:** Python 3.12, dependencies from [requirements.txt](requirements.txt)
+2. **Setup:**
+   - Windows: `setup.bat`
+   - Linux/macOS: `./setup.sh`
 
 ## Usage
 
-Interactive mode with file picker:
+**Windows:**
 
-```powershell
-.\run.bat
+```batch
+run.bat
+run.bat input\example_1.jpg
 ```
 
-Or directly:
+**Linux / macOS:**
 
-```powershell
-.\.venv\Scripts\python.exe src\pick_counter.py
+```bash
+./run.sh
+./run.sh input/example_1.jpg
 ```
 
-Manual path mode is still available:
-
-```powershell
-.\.venv\Scripts\python.exe src\pick_counter.py input\example_1.jpg
-```
+Without arguments, a file picker opens. With a path, that image is processed directly.
 
 From Python:
 
@@ -85,13 +101,16 @@ The JSON output can currently use:
 
 ## Lint and CI
 
-Run lint locally with:
+Run lint locally:
 
-```powershell
+**Windows:**
+```batch
 .\.venv\Scripts\python.exe -m ruff check .
 ```
 
-The repository also includes a GitHub Actions workflow in `.github/workflows/ci.yml` that runs:
+**Linux / macOS:**
+```bash
+./.venv/bin/python -m ruff check .
+```
 
-- `ruff`
-- a smoke test on `example_1.jpg` to `example_6.jpg`
+The repository includes a GitHub Actions workflow in `.github/workflows/ci.yml` that runs `ruff`.
