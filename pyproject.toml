@@ -1,3 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pick-counter"
+version = "0.1.0"
+description = "Count guitar picks in images and export results as JSON"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12"
+
+[project.urls]
+Homepage = "https://github.com/DOKOS-TAYOS/PickCounter"
+Repository = "https://github.com/DOKOS-TAYOS/PickCounter"
+dependencies = [
+    "numpy",
+    "opencv-python",
+]
+
+[project.optional-dependencies]
+dev = ["ruff"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[project.scripts]
+pick-counter = "src.pick_counter:main"
+
 [tool.ruff]
 line-length = 150
 target-version = "py312"

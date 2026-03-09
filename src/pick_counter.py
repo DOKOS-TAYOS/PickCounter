@@ -524,6 +524,11 @@ def _build_color_family_masks(hsv: np.ndarray) -> dict[str, np.ndarray]:
     }
 
 
+def main() -> None:
+    """CLI entry point for the pick-counter script."""
+    raise SystemExit(_cli(sys.argv))
+
+
 def _cli(argv: list[str]) -> int:
     if len(argv) > 2:
         print("Usage: python src/pick_counter.py [image_path]")
@@ -537,4 +542,4 @@ def _cli(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(_cli(sys.argv))
+    main()

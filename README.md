@@ -2,6 +2,8 @@
 
 Small Python project to count guitar picks in a selected image and export the result as JSON.
 
+**Repository:** [https://github.com/DOKOS-TAYOS/PickCounter](https://github.com/DOKOS-TAYOS/PickCounter)
+
 ## Repository contents
 
 - `src/`: application code
