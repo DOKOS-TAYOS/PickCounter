@@ -5,6 +5,7 @@ from __future__ import annotations
 import cv2
 import numpy as np
 
+from .config import GRABCUT_ITERATIONS
 from .models import Candidate
 
 
@@ -70,8 +71,10 @@ def _detect_on_clear_background(image: np.ndarray) -> list[Candidate]:
 
 
 def _detect_on_textured_background(image: np.ndarray) -> list[Candidate]:
-    palette_candidates = _detect_textured_palette_candidates(image)
-    grabcut_mask = _build_textured_grabcut_mask(image)
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+    palette_candidates = _detect_textured_palette_candidates(image, hsv)
+    grabcut_mask = _build_textured_grabcut_mask(image, hsv, lab)
     grabcut_candidates = _extract_candidates_from_mask(grabcut_mask, "textured-grabcut")
 
     if not palette_candidates:
@@ -85,10 +88,12 @@ def _detect_on_textured_background(image: np.ndarray) -> list[Candidate]:
     return combined
 
 
-def _build_textured_grabcut_mask(image: np.ndarray) -> np.ndarray:
+def _build_textured_grabcut_mask(
+    image: np.ndarray,
+    hsv: np.ndarray,
+    lab: np.ndarray,
+) -> np.ndarray:
     h, w = image.shape[:2]
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
     border_lab = _image_border_pixels(lab)
     background_ab = np.median(border_lab[:, 1:], axis=0)
     chroma_distance = np.linalg.norm(lab[:, :, 1:].astype(np.float32) - background_ab.astype(np.float32), axis=2)
@@ -111,7 +116,7 @@ def _build_textured_grabcut_mask(image: np.ndarray) -> np.ndarray:
     background_model = np.zeros((1, 65), dtype=np.float64)
     foreground_model = np.zeros((1, 65), dtype=np.float64)
     try:
-        cv2.grabCut(image, mask, None, background_model, foreground_model, 5, cv2.GC_INIT_WITH_MASK)
+        cv2.grabCut(image, mask, None, background_model, foreground_model, GRABCUT_ITERATIONS, cv2.GC_INIT_WITH_MASK)
     except cv2.error:
         return np.zeros((h, w), dtype=np.uint8)
 
@@ -119,10 +124,9 @@ def _build_textured_grabcut_mask(image: np.ndarray) -> np.ndarray:
     return _cleanup_mask(fg_mask, close_size=9, open_size=5, close_iterations=2, open_iterations=1)
 
 
-def _detect_textured_palette_candidates(image: np.ndarray) -> list[Candidate]:
+def _detect_textured_palette_candidates(image: np.ndarray, hsv: np.ndarray) -> list[Candidate]:
     from .classification import build_color_family_masks
 
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     family_masks = build_color_family_masks(hsv)
 
     cleaned_masks = {
@@ -306,10 +310,31 @@ def _sort_candidates(candidates: list[Candidate]) -> list[Candidate]:
     return sorted(candidates, key=lambda candidate: (candidate.bbox[1], candidate.bbox[0]))
 
 
+def _bbox_iou(bbox_a: tuple[int, int, int, int], bbox_b: tuple[int, int, int, int]) -> float:
+    """Fast bbox IoU; returns 0 if bboxes do not overlap."""
+    x1, y1, w1, h1 = bbox_a
+    x2, y2, w2, h2 = bbox_b
+    x_left = max(x1, x2)
+    y_top = max(y1, y2)
+    x_right = min(x1 + w1, x2 + w2)
+    y_bottom = min(y1 + h1, y2 + h2)
+    if x_right <= x_left or y_bottom <= y_top:
+        return 0.0
+    intersection = (x_right - x_left) * (y_bottom - y_top)
+    area1 = w1 * h1
+    area2 = w2 * h2
+    union = area1 + area2 - intersection
+    return intersection / union if union > 0 else 0.0
+
+
 def _dedupe_candidates(candidates: list[Candidate]) -> list[Candidate]:
     unique: list[Candidate] = []
     for candidate in sorted(candidates, key=lambda item: item.area, reverse=True):
-        overlap = max((_mask_iou(candidate.mask, existing.mask) for existing in unique), default=0.0)
+        overlap = 0.0
+        for existing in unique:
+            if _bbox_iou(candidate.bbox, existing.bbox) < 0.1:
+                continue
+            overlap = max(overlap, _mask_iou(candidate.mask, existing.mask))
         if overlap < 0.3:
             unique.append(candidate)
     return unique

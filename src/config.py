@@ -38,3 +38,6 @@ CONSOLE_NAMES: dict[str, str] = {
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = REPO_ROOT / "output"
+
+MAX_DETECTION_DIMENSION = 1920
+GRABCUT_ITERATIONS = 3
