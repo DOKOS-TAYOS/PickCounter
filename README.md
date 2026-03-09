@@ -2,7 +2,7 @@
 
 Small Python project to count guitar picks in a selected image and export the result as JSON.
 
-**Repository:** [https://github.com/DOKOS-TAYOS/PickCounter](https://github.com/DOKOS-TAYOS/PickCounter)
+**Repository:** [https://github.com/DOKOS-TAYOS/PickCounter](https://github.com/DOKOS-TAYOS/PickCounter) · **Web app:** [https://pick-counter.streamlit.app/](https://pick-counter.streamlit.app/)
 
 ## Repository contents
 
@@ -66,6 +66,8 @@ run.bat input\example_1.jpg
 Without arguments, a file picker opens. With a path, that image is processed directly.
 
 ### Streamlit web app
+
+**[Try it online](https://pick-counter.streamlit.app/)**
 
 To run the web app locally:
 

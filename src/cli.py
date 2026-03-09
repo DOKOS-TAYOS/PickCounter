@@ -17,8 +17,14 @@ def _cli(argv: list[str]) -> int:
         print("Usage: python src/pick_counter.py [image_path]")
         return 1
 
-    if len(argv) == 2:
-        counter_picks(argv[1])
-    else:
-        counter_picks_from_dialog()
+    try:
+        if len(argv) == 2:
+            counter_picks(argv[1])
+        else:
+            counter_picks_from_dialog()
+    except RuntimeError as e:
+        if "No image selected" in str(e):
+            print("No se seleccionó ninguna imagen.")
+            return 1
+        raise
     return 0
