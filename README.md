@@ -7,8 +7,14 @@ Small Python project to count guitar picks in a selected image and export the re
 ## Repository contents
 
 - `src/`: application code
-- `input/`: sample images
-- `real_output/`: expected reference output for the example images
+  - `config.py`: constants, paths, color definitions
+  - `models.py`: data models (Candidate)
+  - `io.py`: image I/O, validation, file dialogs
+  - `detection.py`: pick detection (clear/textured backgrounds)
+  - `classification.py`: color classification
+  - `output.py`: JSON export and console output
+  - `core.py`: main orchestration
+  - `cli.py`: CLI entry point
 - `output/`: generated JSON files
 - `install.bat` / `install.sh`: full installation (clone, check deps, setup)
 - `setup.bat` / `setup.sh`: environment setup (venv, dependencies)

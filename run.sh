@@ -14,4 +14,4 @@ echo "  - Si no pasas argumentos, se abrira un dialogo para elegir una imagen."
 echo "  - Puedes pasar la ruta de una imagen: ./run.sh ruta/imagen.jpg"
 echo ""
 
-"$ROOT/.venv/bin/python" "$ROOT/src/pick_counter.py" "$@"
+"$ROOT/.venv/bin/python" -m src.pick_counter "$@"

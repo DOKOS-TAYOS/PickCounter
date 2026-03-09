@@ -13,4 +13,6 @@ echo   - Si no pasas argumentos, se abrira un dialogo para elegir una imagen.
 echo   - Puedes pasar la ruta de una imagen: run.bat ruta\imagen.jpg
 echo.
 
-call "%ROOT%\.venv\Scripts\python.exe" "%ROOT%src\pick_counter.py" %*
+call "%ROOT%\.venv\Scripts\python.exe" -m src.pick_counter %*
+echo.
+pause
