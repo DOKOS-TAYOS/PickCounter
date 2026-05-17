@@ -9,3 +9,5 @@
 - Added a 10 MB per-file upload limit for Streamlit image uploads.
 - Ignored local Streamlit secrets files so credentials are not committed accidentally.
 - Added upload size validation tests with `unittest`.
+- Updated Dependabot-recommended Python dependencies: `numpy` 2.4.5 and `streamlit` 1.57.0.
+- Updated Dependabot-recommended GitHub Actions: `actions/checkout` v6, `actions/setup-python` v6, and `actions/dependency-review-action` v5.
