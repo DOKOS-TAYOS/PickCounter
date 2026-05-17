@@ -131,7 +131,7 @@ Run lint locally:
 ./.venv/bin/python -m ruff check .
 ```
 
-The repository includes GitHub Actions workflows that run linting, tests, dependency auditing, dependency review, and CodeQL.
+The repository includes GitHub Actions workflows that run linting, tests, dependency auditing, and dependency review.
 
 ## Security
 
@@ -140,7 +140,8 @@ This app is designed for Streamlit Community Cloud and keeps the public deployme
 - Uploaded images are limited to 10 MB per file in both `.streamlit/config.toml` and the app code.
 - Runtime dependencies are pinned in `requirements.txt` so deployments are reproducible.
 - Dependabot is configured for Python dependencies and GitHub Actions in `.github/dependabot.yml`.
-- GitHub Actions run linting, `unittest`, `pip-audit`, dependency review on pull requests, and CodeQL code scanning.
+- GitHub Actions run linting, `unittest`, `pip-audit`, and dependency review on pull requests.
+- CodeQL code scanning is expected to run from GitHub's default setup in the repository Security settings.
 - Local Streamlit secrets must go in `.streamlit/secrets.toml`, which is ignored by Git. In Streamlit Community Cloud, add secrets from the app settings instead of committing them.
 
 Recommended GitHub repository security settings:
