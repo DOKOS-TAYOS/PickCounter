@@ -11,6 +11,19 @@ import streamlit as st
 from src import counter_picks
 from src.config import COLOR_ORDER, CONSOLE_NAMES
 
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+
+
+class UploadedImageTooLargeError(ValueError):
+    """Raised when an uploaded image is larger than the allowed app limit."""
+
+
+def _validate_uploaded_image_size(size_bytes: int) -> None:
+    """Reject uploaded images that exceed the app-level size limit."""
+    if size_bytes > MAX_UPLOAD_BYTES:
+        max_mb = MAX_UPLOAD_BYTES // (1024 * 1024)
+        raise UploadedImageTooLargeError(f"La imagen es demasiado grande. El limite es de {max_mb} MB por archivo.")
+
 
 def _counter_picks_from_bytes(data: bytes, filename: str) -> dict:
     """Run counter_picks on uploaded bytes by writing to a temp file."""
@@ -93,7 +106,11 @@ def _render_analyze_tab() -> None:
     for f in uploaded:
         with st.spinner(f"Analizando {f.name}..."):
             try:
+                file_size = getattr(f, "size", None)
+                if file_size is not None:
+                    _validate_uploaded_image_size(int(file_size))
                 data = f.read()
+                _validate_uploaded_image_size(len(data))
                 result = _counter_picks_from_bytes(data, f.name)
                 results.append((f.name, result))
             except Exception as e:

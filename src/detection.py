@@ -130,8 +130,7 @@ def _detect_textured_palette_candidates(image: np.ndarray, hsv: np.ndarray) -> l
     family_masks = build_color_family_masks(hsv)
 
     cleaned_masks = {
-        color_hint: _cleanup_mask(mask, close_size=9, open_size=5, close_iterations=2, open_iterations=1)
-        for color_hint, mask in family_masks.items()
+        color_hint: _cleanup_mask(mask, close_size=9, open_size=5, close_iterations=2, open_iterations=1) for color_hint, mask in family_masks.items()
     }
     colored_union = np.zeros(image.shape[:2], dtype=np.uint8)
     for color_hint, mask in cleaned_masks.items():
