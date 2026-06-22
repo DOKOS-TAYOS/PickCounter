@@ -21,7 +21,7 @@ Repository = "https://github.com/DOKOS-TAYOS/PickCounter"
 "Live App" = "https://pick-counter.streamlit.app/"
 
 [project.optional-dependencies]
-dev = ["pip-audit", "ruff"]
+dev = ["pip-audit>=2.10.1", "ruff>=0.15.18"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
